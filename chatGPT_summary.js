@@ -1,5 +1,5 @@
 javascript: (() => {
-  const chatPrompt = 'Please write a succinct summary of the text above.';
+  const chatPrompt = 'Please write a very concise, 3 bullet point highlights of the text above.';
   const auth = 'Bearer <GOES HERE>';
   let pMetrics = {};
   allP = document.querySelectorAll("p");
@@ -33,7 +33,7 @@ javascript: (() => {
   console.log(pFontSizeFilter);
   let allText = [];
   let allElements = Array.from(document.body.querySelectorAll("p,h1,h2"));
-  let visibleElements  = allElements.filter(e => e.checkVisibility());
+  let visibleElements = allElements.filter(e => e.checkVisibility());
   visibleElements.forEach(el => {
     let style = window.getComputedStyle(el, null).getPropertyValue('font-size');
     let fontSize = parseFloat(style);
@@ -54,14 +54,14 @@ javascript: (() => {
   });
   console.log(allText);
   document.head.innerHTML = '';
-  document.body.innerHTML = allText.join('</br></br>');
+  document.body.innerHTML = '<p>' + allText.join('</p><p>') + '</p>';
   document.body.style = 'margin: auto; max-width: 600px; line-height:1.6; font-size:16px; background:#f2f2f2;';
 
   const url = 'https://api.openai.com/v1/chat/completions';
 
   body = {
     "model": "gpt-3.5-turbo",
-    "messages": [{ "role": "user", "content": `${allText.join('\n')}\n${chatPrompt}` }]
+    "messages": [{ "role": "user", "content": `${allText.join('\n').slice(0,10000)}\n${chatPrompt}` }]
   };
 
   const summaryDiv = document.createElement('div');
@@ -82,6 +82,6 @@ javascript: (() => {
   function addResponse(data) {
     console.log(data);
     const message = data['choices'][0]['message']['content'];
-    summaryDiv.innerHTML = 'Summary:</br></br>' + message + '</br></br>Original article:</br></br>';
+    summaryDiv.innerHTML = 'Summary:<p>' + message.replaceAll('- ','</p><p>- ') + '</p></br>Original article:</br>';
   }
 })();
