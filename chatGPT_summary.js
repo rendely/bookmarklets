@@ -63,7 +63,7 @@ javascript: (() => {
 
   body = {
     "model": "gpt-3.5-turbo",
-    "messages": [{ "role": "user", "content": `${allText.join('\n').slice(0,10000)}\n${chatPrompt}` }]
+    "messages": [{ "role": "user", "content": `${allText.join('\n').slice(0, 10000)}\n${chatPrompt}` }]
   };
 
   const summaryDiv = document.createElement('div');
@@ -84,6 +84,6 @@ javascript: (() => {
   function addResponse(data) {
     console.log(data);
     const message = data['choices'][0]['message']['content'];
-    summaryDiv.innerHTML = '<h2>Summary:</h2><p>' + message.replaceAll('- ','</p><p>- ') + '</p><';
+    summaryDiv.innerHTML = '<h2>Summary:</h2><p>' + message.replaceAll('- ', '</p><p>- ') + '</p>';
   }
 })();
