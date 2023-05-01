@@ -6,7 +6,7 @@ javascript: (() => {
   let pMetrics = {};
   allP = document.querySelectorAll("p");
   allP.forEach(p => {
-    if (p.checkVisibility()) {
+    if (p.clientHeight > 0) {
       let style = window.getComputedStyle(p, null).getPropertyValue('font-size');
       let fontSize = parseFloat(style);
       console.log(fontSize, p);
@@ -35,7 +35,7 @@ javascript: (() => {
   console.log(pFontSizeFilter);
   let allText = [];
   let allElements = Array.from(document.body.querySelectorAll("p,h1,h2"));
-  let visibleElements = allElements.filter(e => e.checkVisibility());
+  let visibleElements = allElements.filter(e => e.clientHeight > 0);
   visibleElements.forEach(el => {
     let style = window.getComputedStyle(el, null).getPropertyValue('font-size');
     let fontSize = parseFloat(style);
