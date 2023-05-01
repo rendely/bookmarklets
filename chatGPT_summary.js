@@ -1,3 +1,5 @@
+// TODO remove headlines at bottom of page below article
+// Example: https://thehill.com/homenews/space/3980948-nasa-found-a-novel-way-to-keep-voyager-2-spacecraft-going/
 javascript: (() => {
   const chatPrompt = 'Please write a very concise, 3 bullet point highlights of the text above.';
   const auth = 'Bearer <GOES HERE>';
@@ -54,7 +56,7 @@ javascript: (() => {
   });
   console.log(allText);
   document.head.innerHTML = '';
-  document.body.innerHTML = '<p>' + allText.join('</p><p>') + '</p>';
+  document.body.innerHTML = '<h2>Original article:</h2><p>' + allText.join('</p><p>') + '</p>';
   document.body.style = 'margin: auto; max-width: 600px; line-height:1.6; font-size:16px; background:#f2f2f2;';
 
   const url = 'https://api.openai.com/v1/chat/completions';
@@ -82,6 +84,6 @@ javascript: (() => {
   function addResponse(data) {
     console.log(data);
     const message = data['choices'][0]['message']['content'];
-    summaryDiv.innerHTML = 'Summary:<p>' + message.replaceAll('- ','</p><p>- ') + '</p></br>Original article:</br>';
+    summaryDiv.innerHTML = '<h2>Summary:</h2><p>' + message.replaceAll('- ','</p><p>- ') + '</p><';
   }
 })();
