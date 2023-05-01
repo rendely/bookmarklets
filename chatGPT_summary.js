@@ -1,20 +1,24 @@
 javascript: (() => {
+  const chatPrompt = 'Please write a succinct summary of the text above.';
+  const auth = 'Bearer <GOES HERE>';
   let pMetrics = {};
   allP = document.querySelectorAll("p");
   allP.forEach(p => {
-    let style = window.getComputedStyle(p, null).getPropertyValue('font-size');
-    let fontSize = parseFloat(style);
-    if (fontSize in pMetrics) {
-      pMetrics[fontSize]['totWords'] += p.innerText.length;
-      pMetrics[fontSize]['numTags'] += 1;
-      pMetrics[fontSize]['avgWords'] = pMetrics[fontSize]['totWords'] / pMetrics[fontSize]['numTags'];
-    } else {
-      pMetrics[fontSize] = {};
-      pMetrics[fontSize]['totWords'] = p.innerText.length;
-      pMetrics[fontSize]['numTags'] = 1;
-      pMetrics[fontSize]['avgWords'] = pMetrics[fontSize]['totWords'] / pMetrics[fontSize]['numTags'];
+    if (p.checkVisibility()) {
+      let style = window.getComputedStyle(p, null).getPropertyValue('font-size');
+      let fontSize = parseFloat(style);
+      console.log(fontSize, p);
+      if (fontSize in pMetrics) {
+        pMetrics[fontSize]['totWords'] += p.innerText.length;
+        pMetrics[fontSize]['numTags'] += 1;
+        pMetrics[fontSize]['avgWords'] = pMetrics[fontSize]['totWords'] / pMetrics[fontSize]['numTags'];
+      } else {
+        pMetrics[fontSize] = {};
+        pMetrics[fontSize]['totWords'] = p.innerText.length;
+        pMetrics[fontSize]['numTags'] = 1;
+        pMetrics[fontSize]['avgWords'] = pMetrics[fontSize]['totWords'] / pMetrics[fontSize]['numTags'];
+      }
     }
-
   });
   console.log(pMetrics);
   let maxScore = 0;
@@ -28,8 +32,9 @@ javascript: (() => {
   }
   console.log(pFontSizeFilter);
   let allText = [];
-  let allElements = document.body.querySelectorAll("p,h1,h2");
-  allElements.forEach(el => {
+  let allElements = Array.from(document.body.querySelectorAll("p,h1,h2"));
+  let visibleElements  = allElements.filter(e => e.checkVisibility());
+  visibleElements.forEach(el => {
     let style = window.getComputedStyle(el, null).getPropertyValue('font-size');
     let fontSize = parseFloat(style);
     console.log('font size', fontSize === pFontSizeFilter);
@@ -50,14 +55,13 @@ javascript: (() => {
   console.log(allText);
   document.head.innerHTML = '';
   document.body.innerHTML = allText.join('</br></br>');
-  document.body.style = 'margin: auto; max-width: 600px';
+  document.body.style = 'margin: auto; max-width: 600px; line-height:1.6; font-size:16px; background:#f2f2f2;';
 
   const url = 'https://api.openai.com/v1/chat/completions';
-  const auth = '<ADD BEARER TOKEN>';
 
   body = {
     "model": "gpt-3.5-turbo",
-    "messages": [{ "role": "user", "content": `${allText.join('\n')}\nPlease write a succinct summary of the text above.` }]
+    "messages": [{ "role": "user", "content": `${allText.join('\n')}\n${chatPrompt}` }]
   };
 
   const summaryDiv = document.createElement('div');
