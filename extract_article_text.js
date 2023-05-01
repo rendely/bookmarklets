@@ -17,11 +17,12 @@ javascript: (() => {
 
   });
   console.log(pMetrics);
-  let maxPAvgWords = 0;
+  let maxScore = 0;
   let pFontSizeFilter = 0;
   for (const fontSize in pMetrics) {
-    if (pMetrics[fontSize]['avgWords'] > maxPAvgWords) {
-      maxPAvgWords = pMetrics[fontSize]['avgWords'];
+    thisScore = pMetrics[fontSize]['avgWords'] * pMetrics[fontSize]['totWords'];
+    if (pMetrics[fontSize]['avgWords'] > maxScore) {
+      maxScore = thisScore;
       pFontSizeFilter = parseFloat(fontSize);
     }
   }
@@ -49,5 +50,5 @@ javascript: (() => {
   console.log(allText);
   document.head.innerHTML = '';
   document.body.innerHTML = allText.join('</br></br>');
-  document.body.style = 'margin: auto; width: 600px';
+  document.body.style = 'margin: auto; max-width: 600px';
 })();
