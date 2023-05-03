@@ -1,5 +1,6 @@
-// TODO remove headlines at bottom of page below article
-// Example: https://thehill.com/homenews/space/3980948-nasa-found-a-novel-way-to-keep-voyager-2-spacecraft-going/
+// Fix fake headlines below article: https://thehill.com/homenews/space/3980948-nasa-found-a-novel-way-to-keep-voyager-2-spacecraft-going/
+// Fix weird DOM like https://www.phonearena.com/news/google-pixel-fold-all-specs-features-dimensions-tidbits-leaked_id147242
+// Fix support for list elements not being extracted https://musebycl.io/2-minutes/2-minutes-patrick-holly-ecd-upwork 
 javascript: (() => {
   const chatPrompt = 'Please write a very concise, 3 bullet point highlights of the text above.';
   const auth = 'Bearer <GOES HERE>';
@@ -39,25 +40,23 @@ javascript: (() => {
   visibleElements.forEach(el => {
     let style = window.getComputedStyle(el, null).getPropertyValue('font-size');
     let fontSize = parseFloat(style);
-    console.log('font size', fontSize === pFontSizeFilter);
-
     if (el.nodeName === 'P' &&
       fontSize === pFontSizeFilter &&
       el.offsetParent !== null &&
-      el.innerText.length > 20 &&
-      ((el.previousElementSibling === null ? true : el.previousElementSibling.nodeName === 'P') ||
-        (el.nextElementSibling === null ? true : el.nextElementSibling.nodeName === 'P'))
+      el.textContent.length > 20 &&
+      ((el.previousElementSibling === null ? true : el.previousElementSibling.nodeName.match('P|H')) ||
+        (el.nextElementSibling === null ? true : el.nextElementSibling.nodeName.match('P|H')))
     ) {
       allText.push(el.textContent);
     }
-    else if (el.nodeName !== 'P' && el.innerText.length > 20) {
+    else if (el.nodeName !== 'P' && el.textContent.length > 20) {
       allText.push(el.textContent);
     }
   });
   console.log(allText);
   document.head.innerHTML = '';
   document.body.innerHTML = '<h2>Original article:</h2><p>' + allText.join('</p><p>') + '</p>';
-  document.body.style = 'margin: auto; max-width: 600px; line-height:1.6; font-size:16px; background:#f2f2f2;';
+  document.body.style = 'margin: auto; font-family: "Google Sans"; max-width: 700px; line-height:1.6; font-size:16px; background:#f2f2f2;';
 
   const url = 'https://api.openai.com/v1/chat/completions';
 
