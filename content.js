@@ -1,3 +1,7 @@
+// Fix fake headlines below article: https://thehill.com/homenews/space/3980948-nasa-found-a-novel-way-to-keep-voyager-2-spacecraft-going/
+// Fix weird DOM like https://www.phonearena.com/news/google-pixel-fold-all-specs-features-dimensions-tidbits-leaked_id147242
+// Fix support for list elements not being extracted https://musebycl.io/2-minutes/2-minutes-patrick-holly-ecd-upwork 
+
 let pMetrics = {};
 allP = document.querySelectorAll("p");
 allP.forEach(p => {
